@@ -170,10 +170,7 @@ jobs:
       - name: Prepare artifacts
         id: prepareArtifacts
         run: |
-          OUTDIR=android-kernel/out/${{ inputs.version }}/dist
-          if [ ! -e $OUTDIR ]; then
-            OUTDIR=android-kernel/dist
-          fi
+          OUTDIR=android-kernel/out/android13-gs-pixel-5.10/dist
           mkdir output
           cp $OUTDIR/Image ./output/
           cp $OUTDIR/Image.lz4 ./output/
