@@ -171,21 +171,22 @@ jobs:
         id: prepareArtifacts
         run: |
           OUTDIR=android-kernel/out/android13-gs-pixel-5.10/dist
-          mkdir output
-          cp $OUTDIR/Image ./output/
-          cp $OUTDIR/Image.lz4 ./output/
-          git clone https://github.com/Kernel-SU/AnyKernel3
-          rm -rf ./AnyKernel3/.git
-          cp $OUTDIR/Image ./AnyKernel3/
+          # mkdir output
+          cp -r $OUTDIR ./output
+          # cp -f $OUTDIR/Image ./output/
+          # cp -f $OUTDIR/Image.lz4 ./output/
+          # git clone https://github.com/Kernel-SU/AnyKernel3
+          # rm -rf ./AnyKernel3/.git
+          # cp -f $OUTDIR/Image ./AnyKernel3/
 
-      - name: Upload Image and Image.gz
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Image-${{ inputs.version_name }}_${{ inputs.os_patch_level }}
-          path: ./output/*
+          path: ./output/
 
-      - name: Upload AnyKernel3
-        uses: actions/upload-artifact@v3
-        with:
-          name: AnyKernel3-${{ inputs.version_name }}_${{ inputs.os_patch_level }}
-          path: ./AnyKernel3/*
+      # - name: Upload AnyKernel3
+      #   uses: actions/upload-artifact@v3
+      #  with:
+      #    name: AnyKernel3-${{ inputs.version_name }}_${{ inputs.os_patch_level }}
+      #    path: ./AnyKernel3/*
