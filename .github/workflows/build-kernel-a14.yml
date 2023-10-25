@@ -1,40 +1,30 @@
-name: Build Kernel - Android 14
+name: Build Kernel - Android 14 (Lynx)
 on:
   push:
     branches: ["main", "ci"]
     paths:
-      - ".github/workflows/build-kernel-a14.yml"
-      - ".github/workflows/gki-kernel.yml"
+      - ".github/workflows/build-kernel-lynx-a14.yml"
+      - ".github/workflows/lynx-kernel.yml"
       - ".github/scripts/build_a13.sh"
       - "kernel/**"
   pull_request:
     branches: ["main"]
     paths:
-      - ".github/workflows/build-kernel-a14.yml"
-      - ".github/workflows/gki-kernel.yml"
+      - ".github/workflows/build-kernel-lynx-a14.yml"
+      - ".github/workflows/lynx-kernel.yml"
       - ".github/scripts/build-a13.sh"
       - "kernel/**"
   workflow_call:
 jobs:
   build-kernel:
     if: github.event_name != 'pull_request'
-    strategy:
-      matrix:
-        include:
-          - version: "5.15"
-            sub_level: 110
-            os_patch_level: 2023-09
-          - version: "6.1"
-            sub_level: 25
-            os_patch_level: 2023-10
-    uses: ./.github/workflows/gki-kernel.yml
+    uses: ./.github/workflows/lynx-kernel.yml
     secrets: inherit
     with:
-      version: android14-${{ matrix.version }}
-      version_name: android14-${{ matrix.version }}.${{ matrix.sub_level }}
-      tag: android14-${{ matrix.version }}-${{ matrix.os_patch_level }}
-      os_patch_level: ${{ matrix.os_patch_level }}
-      patch_path: ${{ matrix.version }}
+      version: android13-gs-pixel-5.10
+      version_name: android13-gs-pixel-5.10
+      os_patch_level: 2023-10
+      patch_path: 5.10
   upload-artifacts:
     needs: build-kernel
     runs-on: ubuntu-latest
@@ -107,16 +97,9 @@ jobs:
 
   check-build-kernel:
     if: github.event_name == 'pull_request'
-    strategy:
-      matrix:
-        include:
-          - version: "5.15"
-            sub_level: 110
-            os_patch_level: 2023-09
-    uses: ./.github/workflows/gki-kernel.yml
+    uses: ./.github/workflows/lynx-kernel.yml
     with:
-      version: android14-${{ matrix.version }}
-      version_name: android14-${{ matrix.version }}.${{ matrix.sub_level }}
-      tag: android14-${{ matrix.version }}-${{ matrix.os_patch_level }}
-      os_patch_level: ${{ matrix.os_patch_level }}
-      patch_path: ${{ matrix.version }}
+      version: android-gs-lynx-5.10-android14
+      version_name: android-gs-lynx-5.10-android14
+      os_patch_level: 2023-10
+      patch_path: 5.10

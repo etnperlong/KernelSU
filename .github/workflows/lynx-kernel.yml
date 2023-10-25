@@ -6,17 +6,17 @@ on:
       version:
         required: true
         type: string
-        default: android-gs-lynx-5.10-android14
+        default: android13-gs-pixel-5.10
         description: >
           Output directory of gki,
-          for example: android-gs-lynx-5.10-android14
+          for example: android13-gs-pixel-5.10
       version_name:
         required: true
         type: string
-        default: android-gs-lynx-5.10-android14
+        default: android13-gs-pixel-5.10
         description: >
           With SUBLEVEL of kernel,
-          for example: android-gs-lynx-5.10-android14
+          for example: android13-gs-pixel-5.10
       os_patch_level:
         required: false
         type: string
@@ -111,13 +111,13 @@ jobs:
           echo "[+] KernelSU setup"
           GKI_ROOT=$(pwd)
           echo "[+] GKI_ROOT: $GKI_ROOT"
-          echo "[+] Copy KernelSU driver to $GKI_ROOT/aosp/drivers"
-          ln -sf $GITHUB_WORKSPACE/KernelSU/kernel $GKI_ROOT/aosp/drivers/kernelsu
+          echo "[+] Copy KernelSU driver to $GKI_ROOT/private/gs-google/drivers"
+          ln -sf $GITHUB_WORKSPACE/KernelSU/kernel $GKI_ROOT/private/gs-google/drivers/kernelsu
           echo "[+] Add KernelSU driver to Makefile"
-          DRIVER_MAKEFILE=$GKI_ROOT/aosp/drivers/Makefile
+          DRIVER_MAKEFILE=$GKI_ROOT/private/gs-google/drivers/Makefile
           grep -q "kernelsu" $DRIVER_MAKEFILE || echo "obj-y += kernelsu/" >> $DRIVER_MAKEFILE
           echo "[+] Apply KernelSU patches"
-          cd $GKI_ROOT/aosp/ && git apply $GITHUB_WORKSPACE/KernelSU/.github/patches/$PATCH_PATH/*.patch || echo "[-] No patch found"
+          cd $GKI_ROOT/private/gs-google/ && git apply $GITHUB_WORKSPACE/KernelSU/.github/patches/$PATCH_PATH/*.patch || echo "[-] No patch found"
 
           if [ "$IS_DEBUG_KERNEL" = "true" ]; then
             echo "[+] Enable debug features for kernel"
@@ -129,7 +129,7 @@ jobs:
       - name: Symbol magic
         run: |
           echo "[+] Export all symbol from abi_gki_aarch64.xml"
-          COMMON_ROOT=$GITHUB_WORKSPACE/android-kernel/aosp
+          COMMON_ROOT=$GITHUB_WORKSPACE/android-kernel/private/gs-google
           KSU_ROOT=$GITHUB_WORKSPACE/KernelSU
           ABI_XML=$COMMON_ROOT/android/abi_gki_aarch64.xml
           SYMBOL_LIST=$COMMON_ROOT/android/abi_gki_aarch64
@@ -148,10 +148,10 @@ jobs:
       - name: Make working directory clean to avoid dirty
         working-directory: android-kernel
         run: |
-          sed -i '/^rfkill_/d' aosp/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          sed -i '/^rfkill_/d' private/gs-google/android/abi_gki_protected_exports_* || echo "No protected exports!"
           git config --global user.email "bot@kernelsu.org"
           git config --global user.name "KernelSUBot"
-          cd aosp/ && git add -A && git commit -a -m "Add KernelSU"
+          cd private/gs-google/ && git add -A && git commit -a -m "Add KernelSU"
           repo status
 
       - name: Build boot.img
