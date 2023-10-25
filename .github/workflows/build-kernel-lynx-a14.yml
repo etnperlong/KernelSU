@@ -1,14 +1,14 @@
 name: Build Kernel - Android 14 (Lynx)
 on:
   push:
-    branches: ["main", "ci"]
+    branches: ["main", "ci", "lynx"]
     paths:
       - ".github/workflows/build-kernel-lynx-a14.yml"
       - ".github/workflows/lynx-kernel.yml"
       - ".github/scripts/build_a13.sh"
       - "kernel/**"
   pull_request:
-    branches: ["main"]
+    branches: ["main", "lynx"]
     paths:
       - ".github/workflows/build-kernel-lynx-a14.yml"
       - ".github/workflows/lynx-kernel.yml"
