@@ -24,7 +24,7 @@ jobs:
       version: android-gs-lynx-5.10-android14
       version_name: android-gs-lynx-5.10-android14
       os_patch_level: 2023-10
-      patch_path: 5.10
+      patch_path: '5.10'
   upload-artifacts:
     needs: build-kernel
     runs-on: ubuntu-latest

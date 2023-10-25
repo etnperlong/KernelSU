@@ -161,8 +161,8 @@ jobs:
             export KSU_EXPECTED_SIZE=${{ vars.EXPECTED_SIZE }}
             export KSU_EXPECTED_HASH=${{ vars.EXPECTED_HASH }}
           fi
-          if [ -e build_lynx.sh ]; then
-            CCACHE="/usr/bin/ccache" LTO=thin build_lynx.sh
+          if [ -e build/build.sh ]; then
+            CCACHE="/usr/bin/ccache" LTO=thin BUILD_CONFIG=private/devices/google/lynx/build.config.lynx build/build.sh
           else 
             tools/bazel run --disk_cache=/home/runner/.cache/bazel --config=fast --config=stamp --lto=thin //common:kernel_aarch64_dist -- --dist_dir=dist
           fi
